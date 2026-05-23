@@ -1,0 +1,33 @@
+{
+  "name": "shared-resources",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+    "cdk": "cdk",
+    "test": "jest",
+    "prettier": "prettier --config package.json --write ."
+  },
+  "devDependencies": {
+    "aws-cdk": "2.1124.1",
+    "jest": "^30",
+    "prettier": "^3.8.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.255.0",
+    "constructs": "^10.5.0"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5"
+  },
+  "prettierignore": [
+    "node_modules",
+    "build",
+    "dist",
+    "*.log",
+    "package-lock.json"
+  ]
+}
