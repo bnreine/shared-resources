@@ -80,5 +80,11 @@ export class SharedResourcesStack extends Stack {
     codePipelineExecutionStateChangeRule.addTarget({
       bind: () => ({ arn: deploymentNotificationTopic.topicArn }),
     });
+
+
+      new CfnOutput(this, 'VpcId', {
+          value: 'vpc-0058a26222d743b85',
+          exportName: 'SharedVpcId',
+      });
   }
 }
