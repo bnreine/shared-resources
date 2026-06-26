@@ -5,11 +5,36 @@ import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Topic, CfnSubscription } from 'aws-cdk-lib/aws-sns';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 
 export class SharedResourcesStack extends Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
     const { githubConnectionArn } = props;
+
+    new ec2.Vpc(this, 'AppVpc', {
+      ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
+      maxAzs: 2,
+      natGateways: 0,
+
+      subnetConfiguration: [
+        {
+          name: 'Public',
+          subnetType: ec2.SubnetType.PUBLIC,
+          cidrMask: 24,
+        },
+        {
+          name: 'Private',
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+          cidrMask: 24,
+        },
+        {
+          name: 'Database',
+          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+          cidrMask: 28,
+        },
+      ],
+    });
 
     new CfnOutput(this, 'GitHubConnectionArn', {
       value: githubConnectionArn,
