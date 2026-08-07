@@ -6,13 +6,14 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Topic, CfnSubscription } from 'aws-cdk-lib/aws-sns';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 
 export class SharedResourcesStack extends Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
     const { githubConnectionArn } = props;
 
-    new ec2.Vpc(this, 'AppVpc', {
+    const vpc = new ec2.Vpc(this, 'AppVpc', {
       ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
       maxAzs: 2,
       natGateways: 1,
@@ -107,9 +108,14 @@ export class SharedResourcesStack extends Stack {
     });
 
 
-      new CfnOutput(this, 'VpcId', {
-          value: 'vpc-0058a26222d743b85',
-          exportName: 'SharedVpcId',
-      });
+    new StringParameter(this, 'VpcIdParam', {
+      parameterName: '/shared-resources/vpc-id',
+      stringValue: vpc.vpcId,
+    });
+
+    new CfnOutput(this, 'VpcId', {
+      value: vpc.vpcId,
+      exportName: 'SharedVpcId',
+    });
   }
 }
