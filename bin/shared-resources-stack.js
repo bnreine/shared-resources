@@ -16,7 +16,7 @@ export class SharedResourcesStack extends Stack {
     const vpc = new ec2.Vpc(this, 'AppVpc', {
       ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
       maxAzs: 2,
-      natGateways: 1,
+      natGateways: 0,
 
       subnetConfiguration: [
         {
